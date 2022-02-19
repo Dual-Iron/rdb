@@ -11,4 +11,4 @@ COPY . .
 
 RUN cargo build --release
 
-CMD ./target/release/rdb
+CMD ROCKET_PORT=$PORT ./target/release/rdb
