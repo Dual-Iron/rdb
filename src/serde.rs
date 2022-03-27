@@ -3,6 +3,7 @@ use mongodb::bson::doc;
 use regex::Regex;
 use rocket::serde::{Deserialize, Serialize};
 
+// GitHub webhook support
 #[derive(Deserialize)]
 pub(crate) struct GHRelPayload {
     pub action: String,
@@ -28,6 +29,7 @@ pub(crate) struct GHAsset {
     pub browser_download_url: String,
 }
 
+// Manual submissions
 #[derive(Deserialize)]
 pub(crate) struct Submission {
     pub name: String,
@@ -36,9 +38,11 @@ pub(crate) struct Submission {
     pub description: String,
     pub homepage: String,
     pub version: String,
+    pub icon: String,
     pub binaries: Vec<String>,
 }
 
+// Final mod entry
 #[derive(Serialize, Deserialize)]
 pub(crate) struct ModEntry {
     #[serde(rename = "_id")]
@@ -59,6 +63,7 @@ pub(crate) struct ModInfo {
     pub version: String,
     pub description: String,
     pub homepage: String,
+    pub icon: String,
 }
 
 pub enum Verification {
@@ -79,7 +84,7 @@ impl ModEntry {
         }
 
         for binary in &mut submission.binaries {
-            match process_url(&binary) {
+            match process_binary(&binary) {
                 Ok(s) => *binary = s,
                 Err(e) => return Err(e),
             }
@@ -94,6 +99,7 @@ impl ModEntry {
                 version: submission.version,
                 description: submission.description,
                 homepage: submission.homepage,
+                icon: submission.icon,
             },
             downloads: None,
             updated: time,
@@ -135,7 +141,7 @@ impl ModEntry {
     }
 }
 
-fn process_url(url: &str) -> Result<String, &'static str> {
+fn process_binary(url: &str) -> Result<String, &'static str> {
     lazy_static::lazy_static! {
         // Capture 1 = google drive ID
         static ref DRIVE: Regex = Regex::new(r#"https://drive.google.com/file/d/([^/]+)"#).unwrap();
@@ -181,13 +187,16 @@ fn errors(submission: &Submission) -> Option<&'static str> {
     } else if submission.homepage.len() > 500 {
         Some("Homepage length is too long (500 byte max).")
     } else if submission.name.contains(is_invalid) {
-        Some("The submission's name is invalid. Names must match [a-zA-Z0-9_-.].")
+        Some("Name is invalid. Names must match [a-zA-Z0-9_-.].")
     } else if submission.owner.contains(is_invalid) {
-        Some("The submission's owner is invalid. Owners must match [a-zA-Z0-9_-.].")
+        Some("Owner is invalid. Owners must match [a-zA-Z0-9_-.].")
     } else if semver::Version::parse(&submission.version).is_err() {
-        Some("The submission's version doesn't comply with https://semver.org.")
+        Some("Version doesn't comply with https://semver.org.")
     } else {
-        None
+        match url::Url::parse(&submission.icon) {
+            Err(_) => Some("Icon is not a valid URL."),
+            Ok(o) => (o.scheme() != "https").then(|| "Icon URL does not use HTTPS scheme."),
+        }
     }
 }
 

@@ -20,7 +20,7 @@ pub(crate) async fn release(
         return Err(client_err(
             "Deleted releases are ignored by rdb.
 To overwrite release information, submit a new release.
-To delete your mod from rdb, just contact Dual (Discord ID 303617148411183105).",
+To delete your mod from rdb, contact Dual (Discord ID 303617148411183105).",
         ));
     }
 
@@ -44,6 +44,10 @@ fn extract_submission(rel: GHRelPayload, secret: String) -> Option<Submission> {
         secret,
         description: rel.repository.description.unwrap_or_default(),
         homepage: rel.repository.homepage.unwrap_or_default(),
+        icon: format!(
+            "https://raw.githubusercontent.com/{}/{}/icon.png",
+            rel.repository.full_name, rel.release.tag_name
+        ),
         version: rel.release.tag_name,
         binaries: binaries.collect(),
     })
