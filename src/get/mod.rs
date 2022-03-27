@@ -12,7 +12,7 @@ fn expose_as_json(entry: &ModEntry) -> Value {
     json!({
         "name": name,
         "owner": owner,
-        "published": entry.published,
+        "updated": entry.updated,
         "downloads": entry.downloads.unwrap_or(0),
         "description": &entry.info.description,
         "homepage": &entry.info.homepage,
