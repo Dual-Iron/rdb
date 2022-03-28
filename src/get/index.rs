@@ -10,7 +10,7 @@ Gets a specific mod. Example response body:
 {
     "name": "centipede-shields",
     "owner": "Dual-Iron",
-    "published": 1641861631,
+    "updated": 1641861631,
     "downloads": 0,
     "description": "A plugin for Rain World",
     "homepage": "",
