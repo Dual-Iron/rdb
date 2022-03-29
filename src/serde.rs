@@ -49,12 +49,12 @@ pub(crate) struct ModEntry {
     pub id: String,
     pub secret: String,
     pub search: String,
-    pub published: u32,
+    pub published: i64,
     pub info: ModInfo,
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub downloads: Option<u32>,
-    pub updated: u32,
+    pub updated: i64,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -196,13 +196,13 @@ fn errors(submission: &Submission) -> Option<&'static str> {
     }
 }
 
-fn timestamp() -> u32 {
+fn timestamp() -> i64 {
     use std::time::SystemTime;
 
     SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)
         .expect("???")
-        .as_secs() as u32
+        .as_secs() as i64
 }
 
 fn n_gram(s: &str, skip_n: usize) -> String {
