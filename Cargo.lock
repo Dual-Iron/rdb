@@ -1132,6 +1132,7 @@ dependencies = [
  "semver 1.0.5",
  "serde",
  "unicode-segmentation",
+ "url",
 ]
 
 [[package]]

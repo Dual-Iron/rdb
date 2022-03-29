@@ -8,14 +8,15 @@ Gets this page.
 GET /mods/<owner>/<name>
 Gets a specific mod. Example response body:
 {
-	"name": "centipede-shields",
-	"owner": "Dual-Iron",
-	"published": 1641861631,
-	"downloads": 0,
-	"description": "A plugin for Rain World",
-	"homepage": "",
-	"version": "0.3.0",
-	"binaries": ["https://github.com/Dual-Iron/centipede-shields/releases/download/0.3.0/CentiShields.dll"]
+    "name": "centipede-shields",
+    "owner": "Dual-Iron",
+    "updated": 1641861631,
+    "downloads": 0,
+    "description": "A plugin for Rain World",
+    "homepage": "",
+    "version": "0.3.0",
+    "icon": "https://raw.githubusercontent.com/Dual-Iron/centipede-shields/master/wallpounce_icon.png",
+    "binary": "https://github.com/Dual-Iron/centipede-shields/releases/download/0.3.0/CentiShields.dll"
 }
 
 GET /mods/?<page>&<sort>&<search>
@@ -33,7 +34,8 @@ Example request body:
     "description": "A plugin for Rain World",
     "homepage": "",
     "version": "0.3.0",
-    "binaries": ["https://github.com/Dual-Iron/centipede-shields/releases/download/0.3.0/CentiShields.dll"]
+    "icon": "https://raw.githubusercontent.com/Dual-Iron/centipede-shields/master/wallpounce_icon.png",
+    "binaries": "https://github.com/Dual-Iron/centipede-shields/releases/download/0.3.0/CentiShields.dll"
 }
 "#
 }

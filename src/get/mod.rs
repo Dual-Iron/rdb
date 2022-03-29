@@ -17,6 +17,7 @@ fn expose_as_json(entry: &ModEntry) -> Value {
         "description": &entry.info.description,
         "homepage": &entry.info.homepage,
         "version": &entry.info.version,
-        "binaries": &entry.info.binaries
+        "icon": &entry.info.icon,
+        "binary": &entry.info.binary
     })
 }
