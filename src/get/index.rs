@@ -5,6 +5,9 @@ pub(crate) async fn index() -> &'static str {
     r#"GET /
 Gets this page.
 
+GET /mods/count
+Gets the number of mods in the database.
+
 GET /mods/<owner>/<name>
 Gets a specific mod. Example response body:
 {
@@ -19,8 +22,11 @@ Gets a specific mod. Example response body:
     "binary": "https://github.com/Dual-Iron/centipede-shields/releases/download/0.3.0/CentiShields.dll"
 }
 
-GET /mods/?<page>&<sort>&<search>
-Gets a page of mods with 20 mods per page. `page` describes how many pages to skip; `sort` can be one of `new`, `old`, `top`, or `bottom`; `search` filters by mods whose names match the query parameter.
+GET /mods?<page>&<sort>&<search>
+Gets a page of mods. Each page is an array with 20 or fewer elements.
+- `page` describes how many pages to skip
+- `sort` can be one of `new`, `old`, `most-downloads`, or `least-downloads`
+- `search` filters by mods whose names match the query parameter
 
 POST /mods (Content-Type=application/json)
 Submits a mod to the database.

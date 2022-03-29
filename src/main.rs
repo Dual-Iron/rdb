@@ -33,6 +33,7 @@ async fn rocket() -> _ {
             routes![
                 get::one_mod::one_mod,
                 get::many_mods::many_mods,
+                get::count_mods::count_mods,
                 post::submit::submit
             ],
         )

@@ -48,8 +48,8 @@ fn get_sort(sort: &str) -> Option<mongodb::bson::Document> {
     match sort {
         "new" => Some(doc! { "updated": -1 }),
         "old" => Some(doc! { "updated": 1 }),
-        "top" => Some(doc! { "downloads": -1  }),
-        "bottom" => Some(doc! { "downloads": 1 }),
+        "most-downloads" => Some(doc! { "downloads": -1  }),
+        "least-downloads" => Some(doc! { "downloads": 1 }),
         _ => None,
     }
 }

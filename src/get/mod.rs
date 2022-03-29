@@ -4,6 +4,7 @@ use rocket::serde::json::{serde_json::json, Value};
 pub(crate) mod index;
 pub(crate) mod many_mods;
 pub(crate) mod one_mod;
+pub(crate) mod count_mods;
 
 type ApiResponse = Result<Value, rocket::http::Status>;
 
