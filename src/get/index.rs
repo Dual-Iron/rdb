@@ -16,7 +16,7 @@ Gets a specific mod. Example response body:
     "homepage": "",
     "version": "0.3.0",
     "icon": "https://raw.githubusercontent.com/Dual-Iron/centipede-shields/master/wallpounce_icon.png",
-    "binaries": ["https://github.com/Dual-Iron/centipede-shields/releases/download/0.3.0/CentiShields.dll"]
+    "binary": "https://github.com/Dual-Iron/centipede-shields/releases/download/0.3.0/CentiShields.dll"
 }
 
 GET /mods/?<page>&<sort>&<search>
@@ -35,7 +35,7 @@ Example request body:
     "homepage": "",
     "version": "0.3.0",
     "icon": "https://raw.githubusercontent.com/Dual-Iron/centipede-shields/master/wallpounce_icon.png",
-    "binaries": ["https://github.com/Dual-Iron/centipede-shields/releases/download/0.3.0/CentiShields.dll"]
+    "binaries": "https://github.com/Dual-Iron/centipede-shields/releases/download/0.3.0/CentiShields.dll"
 }
 "#
 }

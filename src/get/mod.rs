@@ -18,6 +18,6 @@ fn expose_as_json(entry: &ModEntry) -> Value {
         "homepage": &entry.info.homepage,
         "version": &entry.info.version,
         "icon": &entry.info.icon,
-        "binaries": &entry.info.binaries
+        "binary": &entry.info.binary
     })
 }

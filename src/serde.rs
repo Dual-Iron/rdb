@@ -39,7 +39,7 @@ pub(crate) struct Submission {
     pub homepage: String,
     pub version: String,
     pub icon: String,
-    pub binaries: Vec<String>,
+    pub binary: String,
 }
 
 // Final mod entry
@@ -59,7 +59,7 @@ pub(crate) struct ModEntry {
 
 #[derive(Serialize, Deserialize)]
 pub(crate) struct ModInfo {
-    pub binaries: Vec<String>,
+    pub binary: String,
     pub version: String,
     pub description: String,
     pub homepage: String,
@@ -83,11 +83,9 @@ impl ModEntry {
             return Err(value);
         }
 
-        for binary in &mut submission.binaries {
-            match process_binary(&binary) {
-                Ok(s) => *binary = s,
-                Err(e) => return Err(e),
-            }
+        match process_binary(&mut submission.binary) {
+            Ok(s) => submission.binary = s,
+            Err(e) => return Err(e),
         }
 
         Ok(Self {
@@ -95,7 +93,7 @@ impl ModEntry {
             search: n_gram(&id, 2),
             published: time,
             info: ModInfo {
-                binaries: submission.binaries,
+                binary: submission.binary,
                 version: submission.version,
                 description: submission.description,
                 homepage: submission.homepage,
@@ -170,10 +168,8 @@ fn errors(submission: &Submission) -> Option<&'static str> {
         !c.is_alphanumeric() && !['.', '-', '_'].contains(&c)
     }
 
-    if submission.binaries.is_empty() {
-        Some("The submission has no binaries.")
-    } else if submission.binaries.iter().any(|s| s.len() > 500) {
-        Some("Binary length is too long (500 byte max).")
+    if submission.binary.len() > 500 {
+        Some("Binary URL length is too long (500 byte max).")
     } else if submission.name.len() > 39 {
         Some("Name is too long (39 byte max).")
     } else if submission.owner.len() > 39 {
