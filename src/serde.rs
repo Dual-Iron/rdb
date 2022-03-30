@@ -77,7 +77,19 @@ pub enum Verification {
 impl ModEntry {
     pub fn from_submission(mut submission: Submission) -> Result<Self, &'static str> {
         let time = timestamp();
-        let id = format!("{}/{}", submission.owner.trim(), submission.name.trim());
+
+        fn trim_in_place(s: &mut String) {
+            s.truncate(s.trim_end().len());
+            s.drain(..(s.len() - s.trim_start().len()));
+        }
+
+        trim_in_place(&mut submission.name);
+        trim_in_place(&mut submission.owner);
+        trim_in_place(&mut submission.description);
+        trim_in_place(&mut submission.homepage);
+        trim_in_place(&mut submission.version);
+        trim_in_place(&mut submission.icon);
+        trim_in_place(&mut submission.binary);
 
         if let Some(value) = errors(&submission) {
             return Err(value);
@@ -87,6 +99,8 @@ impl ModEntry {
             Ok(s) => submission.binary = s,
             Err(e) => return Err(e),
         }
+
+        let id = format!("{}/{}", submission.owner, submission.name);
 
         Ok(Self {
             secret: submission.secret,
@@ -169,29 +183,29 @@ fn errors(submission: &Submission) -> Option<&'static str> {
     }
 
     if submission.binary.len() > 500 {
-        Some("Binary URL length is too long (500 byte max).")
-    } else if submission.name.len() > 39 {
-        Some("Name is too long (39 byte max).")
-    } else if submission.owner.len() > 39 {
-        Some("Owner is too long (39 byte max).")
-    } else if submission.secret.len() > 500 {
-        Some("Secret length is too long (500 byte max).")
-    } else if submission.version.len() > 50 {
-        Some("Version length is too long (50 byte max).")
+        Some("Binary URL length must be 500 bytes or less.")
+    } else if submission.name.is_empty() || submission.name.len() > 39 {
+        Some("Name must be 1-39 bytes.")
+    } else if submission.owner.is_empty() || submission.owner.len() > 39 {
+        Some("Owner must be 1-39 bytes.")
+    } else if submission.secret.is_empty() || submission.secret.len() > 500 {
+        Some("Secret length must be 1-500 bytes.")
+    } else if submission.version.is_empty() || submission.version.len() > 50 {
+        Some("Version length must be 1-50 bytes.")
     } else if submission.description.len() > 500 {
-        Some("Description length is too long (500 byte max).")
+        Some("Description length must be 500 bytes or less.")
     } else if submission.homepage.len() > 500 {
-        Some("Homepage length is too long (500 byte max).")
+        Some("Homepage length must be 500 bytes or less.")
     } else if submission.name.contains(is_invalid) {
-        Some("Name is invalid. Names must match [a-zA-Z0-9_-.].")
+        Some("Name must match [a-zA-Z0-9_-.].")
     } else if submission.owner.contains(is_invalid) {
-        Some("Owner is invalid. Owners must match [a-zA-Z0-9_-.].")
+        Some("Owner must match [a-zA-Z0-9_-.].")
     } else if semver::Version::parse(&submission.version).is_err() {
-        Some("Version doesn't comply with https://semver.org.")
+        Some("Version must comply with https://semver.org.")
     } else {
         match url::Url::parse(&submission.icon) {
-            Err(_) => Some("Icon is not a valid URL."),
-            Ok(o) => (o.scheme() != "https").then(|| "Icon URL does not use HTTPS scheme."),
+            Err(_) => Some("Icon must be a valid URL."),
+            Ok(o) => (o.scheme() != "https").then(|| "Icon must use HTTPS scheme."),
         }
     }
 }
