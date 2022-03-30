@@ -182,9 +182,7 @@ fn errors(submission: &Submission) -> Option<&'static str> {
         !c.is_alphanumeric() && !['.', '-', '_'].contains(&c)
     }
 
-    if submission.binary.len() > 500 {
-        Some("Binary URL must be 500 bytes or less.")
-    } else if submission.name.is_empty() || submission.name.len() > 39 {
+    if submission.name.is_empty() || submission.name.len() > 39 {
         Some("Name must be 1-39 bytes.")
     } else if submission.owner.is_empty() || submission.owner.len() > 39 {
         Some("Owner must be 1-39 bytes.")
@@ -196,6 +194,10 @@ fn errors(submission: &Submission) -> Option<&'static str> {
         Some("Description must be 500 bytes or less.")
     } else if submission.homepage.len() > 500 {
         Some("Homepage must be 500 bytes or less.")
+    } else if submission.icon.len() > 500 {
+        Some("Icon URL must be 500 bytes or less.")
+    } else if submission.binary.len() > 500 {
+        Some("Binary URL must be 500 bytes or less.")
     } else if submission.name.contains(is_invalid) {
         Some("Name must match [a-zA-Z0-9_-.].")
     } else if submission.owner.contains(is_invalid) {
@@ -205,7 +207,7 @@ fn errors(submission: &Submission) -> Option<&'static str> {
     } else {
         match url::Url::parse(&submission.icon) {
             Err(_) => Some("Icon must be a valid URL."),
-            Ok(o) => (o.scheme() != "https").then(|| "Icon must use HTTPS scheme."),
+            Ok(o) => (o.scheme() != "https").then(|| "Icon URL must use HTTPS scheme."),
         }
     }
 }
