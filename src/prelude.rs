@@ -9,11 +9,11 @@ pub use mongodb::bson::{doc, to_bson};
 pub(crate) type Mods = mongodb::Collection<crate::serde::ModEntry>;
 pub(crate) type SimpleResponse = Result<&'static str, Custom<&'static str>>;
 
-pub(crate) fn client_err(message: &'static str) -> Custom<&'static str> {
+pub(crate) fn client_err<R>(message: R) -> Custom<R> {
     Custom(Status::BadRequest, message)
 }
 
-pub(crate) fn server_err(message: &'static str) -> Custom<&'static str> {
+pub(crate) fn server_err<R>(message: R) -> Custom<R> {
     Custom(Status::InternalServerError, message)
 }
 

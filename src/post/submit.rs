@@ -7,11 +7,11 @@ pub(crate) async fn submit(data: Json<Submission>, mods: &State<Mods>) -> Simple
 
     match entry.verify(mods).await {
         Success | NotFound => insert_mod(&entry, mods).await,
-        Old => Err(client_err("The version was outdated.")),
-        Failure => Err(client_err("The secret was incorrect.")),
+        Old => Err(client_err("The version is outdated.")),
+        Failure => Err(client_err("The secret is incorrect.")),
         Error(e) => {
             dbg!(e);
-            Err(server_err("There was an internal error."))
+            Err(server_err("The server encountered an error."))
         }
     }
 }
