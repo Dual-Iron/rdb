@@ -1,16 +1,29 @@
 use crate::prelude::*;
 use rocket::{http::Status, response::status::Custom, serde::json::Json, State};
 
-#[rocket::post("/", format = "application/json")]
-pub(crate) async fn ping(_e: PingGuard) -> &'static str {
-    "Successfully connected to rdb! Make sure that:
-- You set content type to \"application/json\",
-- You enabled Release events, and
-- SSL verification is enabled.
+#[rocket::post("/", data = "<data>", format = "application/json")]
+pub(crate) async fn ping(data: Json<GHPingPayload>, _e: PingGuard) -> Result<String, ()> {
+    let (name, owner) = data.0.repository.full_name.split_once('/').ok_or(())?;
+    let desc = data.0.repository.description.unwrap_or_default();
 
-With all that in mind, the next release you create/edit will be published.
-The last asset in that release will be the binary that's uploaded to rdb.
+    let mut homepage = data.0.repository.homepage.unwrap_or_default();
+    if homepage.is_empty() {
+        homepage = format!("https://github.com/{owner}/{name}#readme");
+    }
+
+    Ok(format!(
+        "Successfully connected to rdb! The next release you create or edit will be synced to rdb.
+
+Current (unpublished) information:
+    name            {name}
+    owner           {owner}
+    description     {desc}
+    icon            https://raw.githubusercontent.com/{owner}/{name}/{{tag name}}/icon.png
+    homepage        {homepage}
+    version         --
+    binary          --
 "
+    ))
 }
 
 #[rocket::post("/?<secret>", data = "<data>", format = "application/json")]

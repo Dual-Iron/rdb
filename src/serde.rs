@@ -5,6 +5,11 @@ use rocket::serde::{Deserialize, Serialize};
 
 // GitHub webhook support
 #[derive(Deserialize)]
+pub(crate) struct GHPingPayload {
+    pub repository: GHRepo,
+}
+
+#[derive(Deserialize)]
 pub(crate) struct GHRelPayload {
     pub action: String,
     pub repository: GHRepo,
