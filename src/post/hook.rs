@@ -40,12 +40,17 @@ fn extract_submission(mut rel: GHRelPayload, secret: String) -> Option<Submissio
     let (owner, name) = rel.repository.full_name.split_once('/')?;
     let binary = rel.release.assets.pop()?.browser_download_url;
 
+    let mut homepage = rel.repository.homepage.unwrap_or_default();
+    if homepage.is_empty() {
+        homepage = format!("https://github.com/{}#readme", rel.repository.full_name);
+    }
+
     Some(Submission {
         name: name.to_owned(),
         owner: owner.to_owned(),
         secret,
         description: rel.repository.description.unwrap_or_default(),
-        homepage: rel.repository.homepage.unwrap_or_default(),
+        homepage,
         icon: format!(
             "https://raw.githubusercontent.com/{}/{}/icon.png",
             rel.repository.full_name, rel.release.tag_name
