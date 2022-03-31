@@ -3,7 +3,7 @@ use rocket::{http::Status, response::status::Custom, serde::json::Json, State};
 
 #[rocket::post("/", data = "<data>", format = "application/json")]
 pub(crate) async fn ping(data: Json<GHPingPayload>, _e: PingGuard) -> Result<String, ()> {
-    let (name, owner) = data.0.repository.full_name.split_once('/').ok_or(())?;
+    let (owner, name) = data.0.repository.full_name.split_once('/').ok_or(())?;
     let desc = data.0.repository.description.unwrap_or_default();
 
     let mut homepage = data.0.repository.homepage.unwrap_or_default();
