@@ -52,12 +52,12 @@ POST /github?<secret> X-GitHub-Event=release
 Submits a mod to the database.
 If a mod with the same name+owner already exists, the `secret` key must match as well.
 The icon should be a 128x128 PNG file.
-This endpoint should be used by GitHub webhooks. Setup: https://user-images.githubusercontent.com/31146412/161165157-5d44de5f-e2bb-43e3-876c-807b9a05ae60.mp4
+This endpoint should be used by GitHub webhooks. Setup: https://user-images.githubusercontent.com/31146412/163689916-df787775-ce33-478e-b7a1-0edac45585dd.mp4
 
 ╔═════════════╦═══════════════════════════════════════════════════════╗
 ║    FIELD    ║                  WHERE IT COMES FROM                  ║
 ╠═════════════╬═══════════════════════════════════════════════════════╣
-║ secret      ║ Given in the URL.                                     ║
+║ secret      ║ Given in the URL query parameter.                     ║
 ╠═════════════╬═══════════════════════════════════════════════════════╣
 ║ name        ║ The repository's name.                                ║
 ╠═════════════╬═══════════════════════════════════════════════════════╣
@@ -71,7 +71,7 @@ This endpoint should be used by GitHub webhooks. Setup: https://user-images.gith
 ╠═════════════╬═══════════════════════════════════════════════════════╣
 ║ binary      ║ The release's last asset when sorted alphabetically.  ║
 ╠═════════════╬═══════════════════════════════════════════════════════╣
-║ homepage    ║ The repository's homepage or the GitHub repository.   ║
+║ homepage    ║ The repository's homepage or readme URL.              ║
 ╚═════════════╩═══════════════════════════════════════════════════════╝
 "#
 }
