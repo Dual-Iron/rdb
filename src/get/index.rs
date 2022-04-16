@@ -28,7 +28,7 @@ Gets a page of mods. Each page is an array with 20 or fewer elements.
 - `sort` can be one of `new`, `old`, `most-downloads`, or `least-downloads`
 - `search` filters by mods whose names match the query parameter
 
-POST /mods (Content-Type=application/json)
+POST /mods Content-Type=application/json
 Submits a mod to the database.
 If a mod with the same name+owner already exists, the `secret` key must match as well.
 Every binary must be either a GitHub release asset, Google Drive file, or a Discord attachment.
@@ -43,5 +43,33 @@ Example request body:
     "icon": "https://raw.githubusercontent.com/Dual-Iron/centipede-shields/master/wallpounce_icon.png",
     "binary": "https://github.com/Dual-Iron/centipede-shields/releases/download/0.3.0/CentiShields.dll"
 }
+
+POST /github?<secret> X-GitHub-Event=ping
+Verifies a GitHub webhook for submitting rdb mods automatically.
+
+POST /github?<secret> X-GitHub-Event=release
+Submits a mod to the database.
+If a mod with the same name+owner already exists, the `secret` key must match as well.
+This endpoint should be used by GitHub webhooks. Setup: https://user-images.githubusercontent.com/31146412/161165157-5d44de5f-e2bb-43e3-876c-807b9a05ae60.mp4
+
+╔═════════════╦═══════════════════════════════════════════════════════╗
+║    FIELD    ║                  WHERE IT COMES FROM                  ║
+╠═════════════╬═══════════════════════════════════════════════════════╣
+║ secret      ║ Given in the URL.                                     ║
+╠═════════════╬═══════════════════════════════════════════════════════╣
+║ name        ║ The repository's name.                                ║
+╠═════════════╬═══════════════════════════════════════════════════════╣
+║ owner       ║ The respository's owner.                              ║
+╠═════════════╬═══════════════════════════════════════════════════════╣
+║ version     ║ The release's tag name excluding any "v" prefix.      ║
+╠═════════════╬═══════════════════════════════════════════════════════╣
+║ description ║ The repository description at the time of publishing. ║
+╠═════════════╬═══════════════════════════════════════════════════════╣
+║ icon        ║ The file "icon.png" in the repository's root.         ║
+╠═════════════╬═══════════════════════════════════════════════════════╣
+║ binary      ║ The release's last asset when sorted alphabetically.  ║
+╠═════════════╬═══════════════════════════════════════════════════════╣
+║ homepage    ║ The repository's homepage or the GitHub repository.   ║
+╚═════════════╩═══════════════════════════════════════════════════════╝
 "#
 }

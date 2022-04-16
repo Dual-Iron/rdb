@@ -14,14 +14,16 @@ pub(crate) async fn ping(data: Json<GHPingPayload>, _e: PingGuard) -> Result<Str
     Ok(format!(
         "Successfully connected to rdb! The next release you create or edit will be synced to rdb.
 
-Current (unpublished) information:
+The rdb entry fields will look like the following:
     name            {name}
     owner           {owner}
     description     {desc}
     icon            https://raw.githubusercontent.com/{owner}/{name}/{{tag name}}/icon.png
     homepage        {homepage}
-    version         --
-    binary          --
+    version         {{tag name}}
+    binary          {{last release asset sorted alphabetically}}
+
+Complete documentation of rdb: https://rdb.dual-iron.xyz
 "
     ))
 }
