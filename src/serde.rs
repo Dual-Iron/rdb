@@ -81,13 +81,18 @@ pub enum Verification {
 
 impl ModEntry {
     pub fn from_submission(mut submission: Submission) -> Result<Self, &'static str> {
-        let time = timestamp();
-
         fn trim_in_place(s: &mut String) {
             s.truncate(s.trim_end().len());
             s.drain(..(s.len() - s.trim_start().len()));
         }
 
+        let time = timestamp();
+
+        // Remove 'v' and 'V' prefix
+        let v = &mut submission.version;
+        v.drain(..(v.len() - v.trim_start_matches(['v', 'V']).len()));
+
+        // Trim fields that should be trimmed
         trim_in_place(&mut submission.name);
         trim_in_place(&mut submission.owner);
         trim_in_place(&mut submission.description);
