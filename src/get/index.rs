@@ -31,6 +31,7 @@ Gets a page of mods. Each page is an array with 20 or fewer elements.
 POST /mods Content-Type=application/json
 Submits a mod to the database.
 If a mod with the same name+owner already exists, the `secret` key must match as well.
+The icon should be a 128x128 PNG file.
 Every binary must be either a GitHub release asset, Google Drive file, or a Discord attachment.
 Example request body:
 {
@@ -50,6 +51,7 @@ Verifies a GitHub webhook for submitting rdb mods automatically.
 POST /github?<secret> X-GitHub-Event=release
 Submits a mod to the database.
 If a mod with the same name+owner already exists, the `secret` key must match as well.
+The icon should be a 128x128 PNG file.
 This endpoint should be used by GitHub webhooks. Setup: https://user-images.githubusercontent.com/31146412/161165157-5d44de5f-e2bb-43e3-876c-807b9a05ae60.mp4
 
 ╔═════════════╦═══════════════════════════════════════════════════════╗

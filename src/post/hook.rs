@@ -23,6 +23,8 @@ The rdb entry fields will look like the following:
     version         {{tag name}}
     binary          {{last release asset sorted alphabetically}}
 
+The icon should be a 128x128 `icon.png` file located at your repository's top directory.
+
 Complete documentation of rdb: https://rdb.dual-iron.xyz
 "
     ))
