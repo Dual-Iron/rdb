@@ -203,7 +203,7 @@ fn errors(submission: &Submission) -> Option<&'static str> {
     } else if submission.description.len() > 500 {
         Some("Description must be 500 bytes or less.")
     } else if submission.homepage.len() > 500 {
-        Some("Homepage must be 500 bytes or less.")
+        Some("Homepage URL must be 500 bytes or less.")
     } else if submission.icon.len() > 500 {
         Some("Icon URL must be 500 bytes or less.")
     } else if submission.binary.len() > 500 {
@@ -214,11 +214,18 @@ fn errors(submission: &Submission) -> Option<&'static str> {
         Some("Owner must match [a-zA-Z0-9_-.].")
     } else if semver::Version::parse(&submission.version).is_err() {
         Some("Version must comply with https://semver.org.")
+    } else if url::Url::parse(&submission.homepage)
+        .and_then(|o| Ok(o.scheme() != "https"))
+        .unwrap_or(true)
+    {
+        Some("Homepage must be a URL using the HTTPS scheme.")
+    } else if url::Url::parse(&submission.icon)
+        .and_then(|o| Ok(o.scheme() != "https"))
+        .unwrap_or(true)
+    {
+        Some("Icon must be a URL using the HTTPS scheme.")
     } else {
-        match url::Url::parse(&submission.icon) {
-            Err(_) => Some("Icon must be a valid URL."),
-            Ok(o) => (o.scheme() != "https").then(|| "Icon URL must use HTTPS scheme."),
-        }
+        None
     }
 }
 
