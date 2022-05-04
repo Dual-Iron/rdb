@@ -214,9 +214,10 @@ fn errors(submission: &Submission) -> Option<&'static str> {
         Some("Owner must match [a-zA-Z0-9_-.].")
     } else if semver::Version::parse(&submission.version).is_err() {
         Some("Version must comply with https://semver.org.")
-    } else if url::Url::parse(&submission.homepage)
-        .and_then(|o| Ok(o.scheme() != "https"))
-        .unwrap_or(true)
+    } else if !submission.homepage.is_empty()
+        && url::Url::parse(&submission.homepage)
+            .and_then(|o| Ok(o.scheme() != "https"))
+            .unwrap_or(true)
     {
         Some("Homepage must be a URL using the HTTPS scheme.")
     } else if url::Url::parse(&submission.icon)
